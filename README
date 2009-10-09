@@ -1,0 +1,43 @@
+LiteAccessControl
+=================
+
+Simple access crontrol system
+
+Install
+=======
+
+
+
+
+Example
+=======
+
+Controller:
+
+class ApplicationController < ActionController::Base
+  include LiteAccessControl
+  
+  before_filter :check_users_rights
+  
+  set_rights(
+    :view_notifications   => {:controller => "main", :actions => ["dashboard"]},
+    :manage_invoices      => {:controller => "invoices", :actions => :all}
+  )
+  
+  
+  
+  protected
+  def check_users_rights
+    access_control(current_user) if current_user
+  end
+end
+
+class User < AR
+
+  def permissions
+    [:manage_invoices, :view_notifications]
+  end
+end
+
+
+Copyright (c) 2009 Dmitry Penkin, released under the MIT license
